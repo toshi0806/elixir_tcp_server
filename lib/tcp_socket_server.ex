@@ -15,7 +15,7 @@ defmodule TCPSocketServer do
 
   defp looper(socket) do
     {:ok, client} = Socket.TCP.accept(socket)
-    pid = spawn(TCPServer, :serve, [client])
+    pid = spawn(TCPSocketServer, :serve, [client])
     :ok = Socket.TCP.process(client, pid)
   
     looper(socket)
