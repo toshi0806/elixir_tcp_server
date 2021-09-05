@@ -6,6 +6,7 @@ defmodule TCPServer.Task do
   end
 
   def tcp_server_run(arg) do
-    TCPServer.open(arg)
+#    TCPServer.open(arg)
+    TCPSocketServer.open(arg)
   end
 end
