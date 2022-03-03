@@ -15,7 +15,7 @@ defmodule TCPServer do
 
   defp looper(socket) do
     {:ok, client} = :gen_tcp.accept(socket)
-    pid = spawn(TCPServer, :serve, [client])
+    {:ok, pid} = Task.start(TCPServer, :serve, [client])
     :ok = :gen_tcp.controlling_process(client, pid)
   
     looper(socket)
