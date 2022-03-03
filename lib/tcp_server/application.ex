@@ -10,6 +10,7 @@ defmodule TCPServer.Application do
     port = String.to_integer(System.get_env("PORT") || "12508")
 
     children = [
+      {Task.Supervisor, name: TCPServer.WorkerSupervisor},
       {TCPServer.Task, port},
     ]
 
