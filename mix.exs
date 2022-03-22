@@ -1,13 +1,17 @@
 defmodule TCPServer.MixProject do
   use Mix.Project
 
+  @app :tcp_server
+
   def project do
     [
-      app: :tcp_server,
-      version: "0.1.0",
+      app: @app,
+      version: "0.2.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      releases: [{@app, release()}],
+      preferred_cli_env: [release: :prod]
     ]
   end
 
@@ -22,8 +26,17 @@ defmodule TCPServer.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:bakeware, "~> 0.2.3", runtime: false},
+    ]
+  end
+
+  defp release do
+    [
+      overwrite: true,
+      cookie: "#{@app}_cookie",
+      quiet: true,
+      steps: [:assemble, &Bakeware.assemble/1],
+      strip_beams: Mix.env() == :prod
     ]
   end
 end

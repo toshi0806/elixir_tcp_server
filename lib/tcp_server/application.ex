@@ -7,7 +7,15 @@ defmodule TCPServer.Application do
 
   @impl true
   def start(_type, _args) do
-    port = String.to_integer(System.get_env("PORT") || "12508")
+    argc = "BAKEWARE_ARGC" |> System.get_env("0") |> String.to_integer
+    args = if argc > 0 do
+      for v <- 1..argc, do: System.get_env("BAKEWARE_ARG#{v}")
+    else
+      []
+    end
+
+    {opt, _argv, _error} = OptionParser.parse(args, strict: [port: :integer], aliases: [p: :port])
+    port = opt[:port] || 12508
 
     children = [
       {Task.Supervisor, name: TCPServer.WorkerSupervisor},
